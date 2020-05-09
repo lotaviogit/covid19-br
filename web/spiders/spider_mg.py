@@ -5,21 +5,22 @@ import datetime
 
 from .base import BaseCovid19Spider
 
+
 class PtBrDateField(rows.fields.DateField):
     INPUT_FORMAT = "%d/%m/%Y"
 
-class MGSpider(BaseCovid19Spider):
+
+class Covid19MGSpider(BaseCovid19Spider):
     name = "MG"
-    start_urls = ["http://www.saude.mg.gov.br/images/noticias_e_eventos/000_2020/coronavirus-dados-csv/notificacoes-covid19-mg.csv"]
+    start_urls = [
+        "http://www.saude.mg.gov.br/images/noticias_e_eventos/000_2020/coronavirus-dados-csv/notificacoes-covid19-mg.csv"
+    ]
 
     def parse(self, response):
         # Read the csv
         encoding = "utf-8"
         # Could use force_types here.
-        table  = rows.import_from_csv(
-            io.BytesIO(response.body),
-            encoding=encoding
-            )
+        table = rows.import_from_csv(io.BytesIO(response.body), encoding=encoding)
 
         # Filter the table to only have confirmed cases
         # table = [row for row in table if "Confirmado" in row.classificacao_caso]
@@ -35,7 +36,9 @@ class MGSpider(BaseCovid19Spider):
                         table_conf.append(row)
 
         # The last report date
-        last_date = datetime.datetime.strptime(str(table[0].data_atualizacao), "%Y-%m-%d").strftime('%d/%m/%y')
+        last_date = datetime.datetime.strptime(
+            str(table[0].data_atualizacao), "%Y-%m-%d"
+        ).strftime("%d/%m/%y")
 
         row_key = lambda r: r.municipio_residencia
         table_conf.sort(key=row_key)
