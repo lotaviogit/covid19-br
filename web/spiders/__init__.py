@@ -4,6 +4,7 @@ import multiprocessing
 from scrapy.crawler import CrawlerProcess
 
 from .spider_es import Covid19ESSpider
+from .spider_mg import Covid19MGSpider
 from .spider_pe import Covid19PESpider
 from .spider_pr import Covid19PRSpider
 from .spider_rn import Covid19RNSpider
@@ -12,6 +13,7 @@ from .spider_rr import Covid19RRSpider
 
 SPIDERS = [
     Covid19ESSpider,
+    Covid19MGSpider,
     Covid19PESpider,
     Covid19PRSpider,
     Covid19RRSpider,
